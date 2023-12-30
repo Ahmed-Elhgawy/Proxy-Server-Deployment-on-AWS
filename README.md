@@ -22,7 +22,7 @@ And using Jenkins <img src="img/Jenkins.png" width="40" height="40" align="cente
 
 ## Run Without Jenkins:
 
-You will need to insure your AWS configration and authentication on you AWS email, And then enter varaibles you need in terraform code in **terraform/terraform.tfvars** file, the varaibles you need to enter is:
+You will need to insure your AWS configration and authentication on you AWS email, And then enter varaibles you need in terraform code in **terraform.tfvars** file, the varaibles you need to enter is:
 
 1- region (Optional)        --> The Region where the terraform code will be performed
 
@@ -38,7 +38,7 @@ You will need to insure your AWS configration and authentication on you AWS emai
 
 And if your public key isn't in **~/.ssh/** directory you need to change its path to **~/.ssh/privateKeyName.pem** or change the path in **template/ssh_config** file to **~/path/to/your/private/key/private_key.pem**
 
-And after finish you can run the code by moving to terraform directory `cd terraform/` and run the command `terraform apply -auto-approve`
+And after finish you can run the code by running the command `terraform apply -auto-approve`
 
 ## RUN With Jenjins:
 
@@ -48,4 +48,61 @@ You need to install the following plugin:
  
 2- Slack Notification (Optional) --> if installed you need to edit Jenkinsfile 
 
-And then you need to add credential for aws and with **ID: terraform**, and edit the key-name in Jenkins file with available key-name
+And then you need to add credential for aws and with **ID: terraform**, and edit the kn variable in Jenkins file with available key-name
+
+### Project files
+```
+.
+├── ansible
+|   ├── site.yml
+│   ├── ansible.cfg
+│   ├── roles
+│   │   ├── backend
+│   │   │   ├── handlers
+│   │   │   │   └── main.yml
+│   │   │   ├── tasks
+│   │   │   │   └── main.yml
+│   │   │   ├── templates
+│   │   │   │   └── index.html.j2
+│   │   │   └── vars
+│   │   │       └── main.yml
+│   │   └── frontend
+│   │       ├── files
+│   │       │   └── default
+│   │       ├── handlers
+│   │       │   └── main.yml
+│   │       ├── tasks
+│   │       │   └── main.yml
+│   │       └── vars
+│   │           └── main.yml
+│   └── template
+│       ├── inventory
+│       └── ssh_config
+├── img
+│   ├── Ansible.png
+│   ├── aws.png
+│   ├── flow.png
+│   ├── infra.png
+│   ├── Jenkins.png
+│   ├── Nginx.png
+│   └── Terraform.png
+├── modules
+│   ├── load-balancer
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── vars.tf
+│   ├── network
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── vars.tf
+│   └── security
+│       ├── main.tf
+│       ├── outputs.tf
+│       └── vars.tf
+├── ansible.tf
+├── main.tf
+├── vars.tf
+├── outputs.tf
+├── Jenkinsfile
+└── README.md
+```
