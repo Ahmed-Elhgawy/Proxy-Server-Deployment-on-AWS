@@ -6,7 +6,7 @@ pipeline {
             steps {
 
                 withAWS(credentials: 'terraform') {
-                    withEnv(['kn="DevOps-KeyPair"']) {
+                    withEnv(['kn=DevOps-KeyPair']) {
                         sh "terraform init"
                         sh "terraform apply -var 'key-pair=${kn}' -auto-approve"
                     }
