@@ -8,7 +8,7 @@ pipeline {
                 withAWS(credentials: 'terraform') {
                     withEnv(['kn="DevOps-KeyPair"']) {
                         sh "terraform init"
-                        sh "terraform apply -auto-approve"
+                        sh "terraform apply -var key-pair="DevOps-KeyPair"'  -auto-approve"
                     }
                 }
 
