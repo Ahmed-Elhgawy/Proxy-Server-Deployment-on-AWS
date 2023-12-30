@@ -1,0 +1,6 @@
+---
+# handlers file for roles/frontend
+- name: Restart {{ frontend_svc }}
+  ansible.builtin.systemd_service:
+    name: "{{ frontend_svc }}"
+    state: restarted

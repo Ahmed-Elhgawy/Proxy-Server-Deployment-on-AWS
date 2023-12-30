@@ -1,0 +1,17 @@
+---
+# tasks file for roles/frontend
+- name: Install {{ frontend_pakages }}
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ frontend_pakages }}"
+    state: present
+
+- name: Copy proxy file
+  ansible.builtin.copy:
+    src: default
+    dest: "{{ frontend_proxy_path }}default"
+    owner: root
+    group: root
+    mode: '0664'
+  notify:
+    - Restart {{ frontend_svc }}

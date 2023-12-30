@@ -1,0 +1,11 @@
+[frontendServers]
+frontend_ip
+
+[backendServers]
+backend_ip
+
+[frontendServers:vars]
+ansible_ssh_common_args = '-F ./template/ssh_config'
+
+[backendServers:vars]
+ansible_ssh_common_args = '-F ./template/ssh_config'

@@ -1,0 +1,9 @@
+---
+# tasks file for roles/backend
+- name: Install {{ backend_pakages }}
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ backend_pakages }}"
+    state: present
+  notify:
+    - Copy index file

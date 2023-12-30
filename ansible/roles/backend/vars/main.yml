@@ -1,0 +1,5 @@
+---
+# vars file for roles/backend
+backend_pakages: apache2
+
+backend_root_path: /var/www/html/

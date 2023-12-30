@@ -1,0 +1,7 @@
+---
+# vars file for roles/frontend
+frontend_pakages: nginx
+
+frontend_svc: nginx
+
+frontend_proxy_path: /etc/nginx/sites-available/
