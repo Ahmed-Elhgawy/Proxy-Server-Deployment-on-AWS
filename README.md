@@ -1,4 +1,4 @@
-# Proxy Server Deployment on AWS
+# Deploying Proxy Server AWS
 
 Using terraform <img src="img/Terraform.png" width="30" height="30" align="center"/> as Intrastracture as a code (IaC) tool to deploy infrastracture on Amazon Web Server (AWS) cloud provider <img src="img/aws.png" width="40" height="40" align="center"/>.
 
@@ -12,41 +12,76 @@ And using Jenkins <img src="img/Jenkins.png" width="40" height="40" align="cente
 ### Path Flow
 <img src="img/flow.png" alt="flow"/>
 
-## Prerequests in server which will run the code:
+## Prerequisite:
+1. AWS CLI
+2. Terraform
+3. Ansible
 
-1- Terraform CLI
-
-2- Python3
-
-3- Ansible
+## Terraform Code
+### Modules:
+#### 1. Network Module:
+This module is used to create VPC, subnets, and other resources related to network \
+Module's variables:
+|Variable |Description |
+|:---|:---|
+|cidr |The range of ip that will be used in infrastracture |
+|azs |The Availability zones that will be used (depends on region) and will used to achieve HA|
+#### 2. Security Module:
+This module is used to create securtiy groups taht will be used by ec2 instances
+|Security Group |Usage |
+|:---|:--|
+|bastion-sg |Allow SSH traffic for bastion host from any|
+|frontend-sg |Allow traffic from application load-balancer only|
+|backend-sg |Allow traffic from network load-balancer only|
+|nlb-sg |Allow traffic from backend-sg only|
+|alb-sg |Allow traffic to application from any|
+Module's variables:
+|Variable |Description |
+|:---|:---|
+|vpc-id |The ID of VPC where security groups will be created|
+#### 3. Load-balancer Module:
+This mdoule is used to create application and network load-balancer and their target groups \
+|Variables |Description |
+|:---|:---|
+|alb-sg|List of security groups id that alb will use|
+|nlb-sg|List of security groups id that nlb will use|
+|alb-subnets|List of subnets id that will be attached to alb|
+|nlb-subnets|List of subnets id that will be attached to nlb|
+|vpc-id|The ID of VPC that wiil connect to ALB target group|
+|azs|Availability zones|
+|frontend-instance-id|The IDs of frontend instances|
+|backend-instance-id|The IDs of backend instances|
+### Main file:
+This file where all modules are connected and create frontend, backend, and bastion servers \
+terraform variable:
+|Variable |Description |Default |
+|:---|:---|:---|
+|region |The region on AWS account where resources will be created|"us-east-1"|
+|cidr |The range of ip that will be used in infrastracture|"10.0.0.0/16"|
+|azs |The Availability zones that will be used (depends on region) and will used to achieve HA|["us-east-1a", "us-east-1b"]|
+|instance-ami |The OS that will be used in ec2 instances|"ami-0c7217cdde317cfec"|
+|instance-type |The type of ec2 instance that will be created|"t2.micro"|
+|key-pair |The key pair which used to connect to ec2 instance|Must Be Added|
 
 ## Run Without Jenkins:
-
-You will need to insure your AWS configration and authentication on you AWS email, And then enter varaibles you need in terraform code in **terraform.tfvars** file, the varaibles you need to enter is:
-
-1- region (Optional)        --> The Region where the terraform code will be performed
-
-2- cidr (Optional)          --> IP range which will be used in virtual private network
-
-3- azs (Optional)           --> Avaliability zones the number of instance will change depends on the number of azs
-
-4- instance-ami (Optional)  --> The OS that will be used in instance
-
-5- instance-type (Optional) --> The resources that will be used in instance
-
-6- key-pair(Required)       --> The priavte key that will be used to connect to instance
+You will need to insure your AWS configration and authentication on you AWS email, And then enter varaibles you need in terraform code there is many ways to enter variable
+1. Enter variable in `terraform.tfvars` file
+2. Add needed varible (key-pair) while deploying terraform code
+```
+terraform apply -auto-approve
+```
+2. Add the value in command
+```
+terraform apply -var key-pair="key-pair-name" -auto-approve
+```
 
 And if your public key isn't in **~/.ssh/** directory you need to change its path to **~/.ssh/privateKeyName.pem** or change the path in **template/ssh_config** file to **~/path/to/your/private/key/private_key.pem**
 
-And after finish you can run the code by running the command `terraform apply -auto-approve`
 
-## RUN With Jenjins:
-
-You need to install the following plugin:
-
-1- Pipeline: AWS Steps (Required)
- 
-2- Slack Notification (Optional) --> if installed you need to edit Jenkinsfile 
+## RUN With Jenkins:
+You need to install the following plugins:
+1. [Pipeline: AWS Steps](https://plugins.jenkins.io/pipeline-aws/) (Required)
+2. [Slack Notification](https://plugins.jenkins.io/slack/) (Optional) 
 
 And then you need to add credential for aws and with **ID: terraform**, and edit the kn variable in Jenkins file with available key-name
 
