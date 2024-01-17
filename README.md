@@ -35,6 +35,7 @@ This module is used to create securtiy groups taht will be used by ec2 instances
 |backend-sg |Allow traffic from network load-balancer only|
 |nlb-sg |Allow traffic from backend-sg only|
 |alb-sg |Allow traffic to application from any|
+
 Module's variables:
 |Variable |Description |
 |:---|:---|
