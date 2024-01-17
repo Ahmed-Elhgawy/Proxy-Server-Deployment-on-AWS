@@ -23,7 +23,7 @@ variable "nlb-subnets" {
 # VPC =====================================================
 variable "vpc-id" {
     type = string
-    description = "The ID of VPC that wiil conect to ALB target group"
+    description = "The ID of VPC that wiil connect to ALB target group"
 }
 
 # Availbility Zones =======================================
